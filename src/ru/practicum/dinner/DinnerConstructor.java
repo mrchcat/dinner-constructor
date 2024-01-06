@@ -5,36 +5,52 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class DinnerConstructor {
-    private HashMap<String, String> menu; //блюдо-тип
+    private HashMap<String, ArrayList<String>> menu; //тип-блюда
+    private HashSet<String> dishes; //блюда
 
 
     public DinnerConstructor() {
-        this.menu = new HashMap<String, String>();
+        this.menu = new HashMap<>();
+        this.dishes = new HashSet<>();
     }
 
-    boolean addNewDish(String dishType, String dishName) {
-        if (menu.containsKey(dishName)) return false;
-        else {
-            menu.put(dishName,dishType);
+    boolean isDishTypeExist(String dishType) {
+        return menu.containsKey(dishType);
+    }
+
+    boolean isDishExist(String dishName) {
+        return dishes.contains(dishName);
+    }
+
+
+    void addNewDish(String dishType, String dishName) {
+        dishes.add(dishName);
+        if (menu.containsKey(dishType)) {
+            menu.get(dishType).add(dishName);
+        } else {
+            ArrayList<String> list = new ArrayList<>();
+            list.add(dishName);
+            menu.put(dishType, list);
         }
-        return true;
-    }
-
-    boolean isDishTypeExist(String dishType){
-        return menu.containsValue(dishType);
     }
 
     void printMenu() {
         System.out.println("Меню:");
-        for (var dish: menu.entrySet()) {
-            System.out.println(dish.getValue()+": "+dish.getKey());
+        if (menu.isEmpty()) System.out.println("Меню не заполнено");
+        else {
+            for (var entry : menu.entrySet()) {
+                System.out.println("Категория: " + entry.getKey());
+                for (String dish : entry.getValue()) {
+                    System.out.println("    -" + dish);
+                }
+            }
         }
     }
 
 
-    void generateDishCombo(int numberOfCombos, ArrayList<String> mealTypes) {
+    void generateDishCombo(int numberOfCombos, Box<String> boxWithTypes) {
         System.out.println("numberOfCombos = " + numberOfCombos);
-        System.out.println("mealTypes = " + mealTypes);
+        boxWithTypes.printBox();
         /*      int totalCombinations = 1;
         for (String dishType : mealTypes) {
             totalCombinations *= menu.get(dishType).size();
