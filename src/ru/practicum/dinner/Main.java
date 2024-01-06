@@ -6,8 +6,8 @@ import java.util.Locale;
 import java.util.Scanner;
 
 public class Main {
-    private static DinnerConstructor dc=new DinnerConstructor();
-    private static Scanner scanner= new Scanner(System.in);
+    private static DinnerConstructor dc = new DinnerConstructor();
+    private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
         boolean isContinueMenu = true;//условие на выход из меню
@@ -38,7 +38,9 @@ public class Main {
     }
 
     private static String getStringFromUser(Scanner scanner) {
-        return scanner.nextLine().trim().toLowerCase(Locale.ROOT);
+        String choice = scanner.nextLine().trim().toLowerCase(Locale.ROOT);
+        //if (scanner.hasNextLine()) scanner.nextLine(); // удаляем лишний текст, если пользователь его напечатал
+        return choice;
     }
 
     private static void addNewDish() {
@@ -46,36 +48,36 @@ public class Main {
         String dishType = getStringFromUser(scanner);
         System.out.println("Введите название блюда:");
         String dishName = getStringFromUser(scanner);
-        if (dc.addNewDish(dishType,dishName)) {
-            System.out.println("блюдо \""+dishName+"\" успешно добавлено в категорию \""+dishType+"\"");
+        if (dc.addNewDish(dishType, dishName)) {
+            System.out.println("блюдо \"" + dishName + "\" успешно добавлено в категорию \"" + dishType + "\"");
+        } else {
+            System.out.println("Ошибка ! Блюдо \"" + dishName + "\" уже присутствует в меню. Введите другое блюдо");
         }
-        else {
-            System.out.println("Ошибка ! Блюдо \""+dishName+"\" уже присутствует в категории \""+dishType+"\"");
-        }
-//        dc.printMenu();
+        dc.printMenu();
     }
 
     private static void generateDishCombo() {
-        boolean isAnyDishesAdded=false;
+        boolean isAnyDishesAdded = false;
         System.out.println("Начинаем конструировать обед...");
         System.out.println("Введите количество наборов, которые нужно сгенерировать:");
-        int numberOfCombos = getNumberFromUser(scanner);
-        System.out.println("Вводите типы блюда, разделяя символом переноса строки (enter). Для завершения ввода введите пустую строку");
+        int numberOfCombos;
+        while ((numberOfCombos = getNumberFromUser(scanner)) <= 0) {
+            System.out.println("Введите положительное наборов");
+        }
+        ArrayList<String> mealTypes = new ArrayList<>();
         String dishType;
-        ArrayList<String> mealTypes=new ArrayList<>();
-        //реализуйте ввод типов блюд
-        while (!scanner.nextLine().isEmpty()) {
-            dishType= getStringFromUser(scanner);
-            if(!dc.isContainDishType(dishType)) {
-                System.out.println("Ошибка. Категория \"" +dishType+"\" отсуствует в меню. Введите другой тип");
-            }
-            else {
+
+        System.out.println("Вводите типы блюда, разделяя символом переноса строки (enter). Для завершения ввода введите пустую строку");
+        while (!(dishType=getStringFromUser(scanner)).isEmpty()) {
+            if (!dc.isDishTypeExist(dishType)) {
+                System.out.println("Ошибка. Категория \"" + dishType + "\" отсуствует в меню. Введите другой тип");
+            } else {
                 mealTypes.add(dishType);
-                isAnyDishesAdded=true;
+                isAnyDishesAdded = true;
             }
         }
-        if (isAnyDishesAdded) dc.generateDishCombo(numberOfCombos,mealTypes);
-        else System.out.println("Блюда не введены");
+        if (isAnyDishesAdded) dc.generateDishCombo(numberOfCombos, mealTypes);
+        else System.out.println("Ошибка ! Корректные типы блюд не введены. Проверьте, что меню заполнено и повторите ввод");
     }
 
 

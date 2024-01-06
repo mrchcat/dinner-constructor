@@ -5,42 +5,37 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class DinnerConstructor {
-    private HashMap<String, String> menu;
+    private HashMap<String, String> menu; //блюдо-тип
+
 
     public DinnerConstructor() {
-        this.menu = new HashMap<String, HashSet<String>>();
+        this.menu = new HashMap<String, String>();
     }
 
     boolean addNewDish(String dishType, String dishName) {
-        HashSet<String> dishes;
-        if (menu.containsKey(dishType)) {
-            dishes = menu.get(dishType);
-            if (dishes.contains(dishName)) return false;
-            else dishes.add(dishName);
-        } else {
-            dishes = new HashSet<>();
-            dishes.add(dishName);
-            menu.put(dishType, dishes);
+        if (menu.containsKey(dishName)) return false;
+        else {
+            menu.put(dishName,dishType);
         }
         return true;
     }
 
-    boolean isContainDishType(String dishType) {
-        return menu.containsKey(dishType);
+    boolean isDishTypeExist(String dishType){
+        return menu.containsValue(dishType);
     }
 
     void printMenu() {
         System.out.println("Меню:");
-        for (var entry : menu.entrySet()) {
-            System.out.println(entry.getKey());
-            for (String s : entry.getValue()) {
-                System.out.println("    " + s);
-            }
+        for (var dish: menu.entrySet()) {
+            System.out.println(dish.getValue()+": "+dish.getKey());
         }
     }
 
+
     void generateDishCombo(int numberOfCombos, ArrayList<String> mealTypes) {
-        int totalCombinations = 1;
+        System.out.println("numberOfCombos = " + numberOfCombos);
+        System.out.println("mealTypes = " + mealTypes);
+        /*      int totalCombinations = 1;
         for (String dishType : mealTypes) {
             totalCombinations *= menu.get(dishType).size();
         }
@@ -56,7 +51,7 @@ public class DinnerConstructor {
             for(String dish: menu.get(dishType)){
 
             }
-        }
+        }*/
     }
 
 }
