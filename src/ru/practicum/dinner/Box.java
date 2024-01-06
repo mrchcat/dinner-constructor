@@ -1,9 +1,10 @@
 package ru.practicum.dinner;
 
 import java.util.HashMap;
+import java.util.Set;
 
 public class Box<T> {
-    HashMap<T, Integer> box;
+    private final HashMap<T, Integer> box;
 
     public Box() {
         this.box = new HashMap<>();
@@ -27,4 +28,19 @@ public class Box<T> {
              System.out.println("{"+entry.getKey()+" - "+entry.getValue()+"}");
          }
      }
+
+     boolean isEmpty(){
+        return box.isEmpty();
+     }
+
+    int size(){
+        return box.size();
+    }
+
+    public Set<T> getKeySet(){
+        return box.keySet();
+    }
+
 }
+
+

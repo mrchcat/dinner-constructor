@@ -57,11 +57,10 @@ public class Main {
             dc.addNewDish(dishType,dishName);
             System.out.println("блюдо \"" + dishName + "\" успешно добавлено в категорию \"" + dishType + "\"");
         }
-        dc.printMenu();
+//        dc.printMenu();
     }
 
     private static void generateDishCombo() {
-        boolean isAnyDishesAdded = false;
         System.out.println("Начинаем конструировать обед...");
         System.out.println("Введите количество наборов, которые нужно сгенерировать:");
         int numberOfCombos;
@@ -71,17 +70,20 @@ public class Main {
         Box<String> boxWithTypes = new Box<>();
         String dishType;
 
-        System.out.println("Вводите типы блюда, разделяя символом переноса строки (enter). Для завершения ввода введите пустую строку");
+        System.out.println("Вводите типы блюд, разделяя символом переноса строки (enter). Для завершения ввода введите пустую строку");
         while (!(dishType=getStringFromUser(scanner)).isEmpty()) {
             if (dc.isDishTypeExist(dishType)) {
                 boxWithTypes.add(dishType);
-                isAnyDishesAdded = true;
             } else {
-                System.out.println("Ошибка. Категория \"" + dishType + "\" отсуствует в меню. Введите другой тип");
+                System.out.println("Ошибка. Категория \"" + dishType + "\" отсутствует в меню. Введите другой тип");
             }
         }
-        if (isAnyDishesAdded) dc.generateDishCombo(numberOfCombos, boxWithTypes);
-        else System.out.println("Ошибка ! Корректные типы блюд не введены. Проверьте, что меню заполнено и повторите ввод");
+        if (boxWithTypes.isEmpty()) {
+            System.out.println("Ошибка ! Корректные типы блюд не введены. Проверьте, что меню заполнено и повторите ввод");
+        }
+        else{
+            dc.generateDishCombo(numberOfCombos, boxWithTypes);
+        }
     }
 
 
