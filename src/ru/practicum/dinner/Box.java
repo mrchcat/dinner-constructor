@@ -33,11 +33,7 @@ public class Box<T> {
         return box.isEmpty();
      }
 
-    int size(){
-        return box.size();
-    }
-
-    public Set<T> getKeySet(){
+     public Set<T> getKeySet(){
         return box.keySet();
     }
 

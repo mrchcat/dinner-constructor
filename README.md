@@ -1,2 +1,2 @@
 # dinner-constructor
-Precode for sprint 3 dinner constructor
+sprint 3 dinner constructor

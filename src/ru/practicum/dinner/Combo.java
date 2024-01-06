@@ -3,13 +3,13 @@ package ru.practicum.dinner;
 import java.util.HashSet;
 
 public class Combo {
-    HashSet<String> set;
+    private final HashSet<String> set;
 
     public Combo(HashSet<String> combo) {
         this.set = combo;
     }
 
-    public HashSet<String> getSet(){
+    public HashSet<String> getSet() {
         return set;
     }
 
@@ -18,9 +18,9 @@ public class Combo {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Combo combo1 = (Combo) o;
-        if(set.size()!=combo1.getSet().size()) return false;
-        for(String s : set){
-            if(!combo1.getSet().contains(s)) return false;
+        if (set.size() != combo1.getSet().size()) return false;
+        for (String s : set) {
+            if (!combo1.getSet().contains(s)) return false;
         }
         return true;
     }
@@ -36,10 +36,10 @@ public class Combo {
 
     @Override
     public String toString() {
-        StringBuilder res=new StringBuilder();
-        for(String s: set){
-            res.append(s+", ");
+        StringBuilder res = new StringBuilder();
+        for (String s : set) {
+            res.append(s).append(", ");
         }
-        return res.substring(0,res.length()-2).toString();
+        return res.substring(0, res.length() - 2);
     }
 }

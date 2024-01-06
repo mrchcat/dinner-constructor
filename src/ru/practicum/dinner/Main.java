@@ -1,20 +1,18 @@
 package ru.practicum.dinner;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Locale;
 import java.util.Scanner;
 
 public class Main {
-    private static DinnerConstructor dc = new DinnerConstructor();
-    private static Scanner scanner = new Scanner(System.in);
+    private final static DinnerConstructor dc = new DinnerConstructor();
+    private final static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
         boolean isContinueMenu = true;//условие на выход из меню
 
         do {
             printMenu();
-            switch (getNumberFromUser(scanner)) {
+            switch (getNumberFromUser()) {
                 case 1 -> addNewDish();
                 case 2 -> generateDishCombo();
                 case 3 -> dc.printMenu();
@@ -33,45 +31,42 @@ public class Main {
         System.out.println("4 - Выход");
     }
 
-    private static int getNumberFromUser(Scanner scanner) {
+    private static int getNumberFromUser() {
         int choice = -1;
-        if (scanner.hasNextInt()) choice = scanner.nextInt();
-        if (scanner.hasNextLine()) scanner.nextLine(); // удаляем лишний текст, если пользователь его напечатал
+        if (Main.scanner.hasNextInt()) choice = scanner.nextInt();
+        if (Main.scanner.hasNextLine()) scanner.nextLine(); // удаляем лишний текст, если пользователь его напечатал
         return choice;
     }
 
-    private static String getStringFromUser(Scanner scanner) {
-        String choice = scanner.nextLine().trim().toLowerCase(Locale.ROOT);
-        //if (scanner.hasNextLine()) scanner.nextLine(); // удаляем лишний текст, если пользователь его напечатал
-        return choice;
+    private static String getStringFromUser() {
+        return Main.scanner.nextLine().trim().toLowerCase(Locale.ROOT);
     }
 
     private static void addNewDish() {
         System.out.println("Введите тип блюда:");
-        String dishType = getStringFromUser(scanner);
+        String dishType = getStringFromUser();
         System.out.println("Введите название блюда:");
-        String dishName = getStringFromUser(scanner);
+        String dishName = getStringFromUser();
         if (dc.isDishExist(dishName)) {
             System.out.println("Ошибка ! Блюдо \"" + dishName + "\" уже присутствует в меню. Введите другое блюдо");
         } else {
-            dc.addNewDish(dishType,dishName);
+            dc.addNewDish(dishType, dishName);
             System.out.println("блюдо \"" + dishName + "\" успешно добавлено в категорию \"" + dishType + "\"");
         }
-//        dc.printMenu();
     }
 
     private static void generateDishCombo() {
         System.out.println("Начинаем конструировать обед...");
         System.out.println("Введите количество наборов, которые нужно сгенерировать:");
         int numberOfCombos;
-        while ((numberOfCombos = getNumberFromUser(scanner)) <= 0) {
+        while ((numberOfCombos = getNumberFromUser()) <= 0) {
             System.out.println("Введите положительное число наборов");
         }
         Box<String> boxWithTypes = new Box<>();
         String dishType;
 
         System.out.println("Вводите типы блюд, разделяя символом переноса строки (enter). Для завершения ввода введите пустую строку");
-        while (!(dishType=getStringFromUser(scanner)).isEmpty()) {
+        while (!(dishType = getStringFromUser()).isEmpty()) {
             if (dc.isDishTypeExist(dishType)) {
                 boxWithTypes.add(dishType);
             } else {
@@ -80,11 +75,9 @@ public class Main {
         }
         if (boxWithTypes.isEmpty()) {
             System.out.println("Ошибка ! Корректные типы блюд не введены. Проверьте, что меню заполнено и повторите ввод");
-        }
-        else{
+        } else {
             dc.generateDishCombo(numberOfCombos, boxWithTypes);
         }
     }
-
 
 }

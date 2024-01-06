@@ -3,7 +3,6 @@ package ru.practicum.dinner;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 
 public class DinnerConstructor {
     private final HashMap<String, ArrayList<String>> menu; //тип-блюда
@@ -37,38 +36,24 @@ public class DinnerConstructor {
         }
     }
 
-    void printMenu() {
-        System.out.println("Меню:");
-        if (menu.isEmpty()) System.out.println("Меню не заполнено");
-        else {
-            for (var entry : menu.entrySet()) {
-                System.out.println("Категория: " + entry.getKey());
-                for (String dish : entry.getValue()) {
-                    System.out.println("    -" + dish);
-                }
-            }
-        }
-    }
-
     void generateDishCombo(int numberOfCombos, Box<String> boxWithTypes) {
         comboSet.clear();
         System.out.println("вошли в generateDishCombo");
-        System.out.println("numberOfCombos="+numberOfCombos);
+        System.out.println("numberOfCombos=" + numberOfCombos);
         boxWithTypes.printBox();
         if (!isEnoughPower(numberOfCombos, boxWithTypes)) return;
         int count = 0;
         Combo combo;
         System.out.println("generateDishCombo после проверки");
         while (count < numberOfCombos) {
-            System.out.println("count="+count);
+            System.out.println("count=" + count);
             combo = getCombo(boxWithTypes);
             System.out.println(combo);
             if (!comboSet.contains(combo)) {
                 comboSet.add(combo);
                 count++;
                 System.out.println("добавили");
-            }
-            else System.out.println("отказ");
+            } else System.out.println("отказ");
         }
         printCombo();
     }
@@ -85,14 +70,14 @@ public class DinnerConstructor {
         for (String dishType : boxWithTypes.getKeySet()) {
             dishAskedFreq = boxWithTypes.get(dishType);
             numOfDishes = menu.get(dishType).size();
-            System.out.println("dishType="+dishType+"dishAskedFreq="+dishAskedFreq+"; numOfDishes="+numOfDishes);
-            count=0;
+            System.out.println("dishType=" + dishType + "dishAskedFreq=" + dishAskedFreq + "; numOfDishes=" + numOfDishes);
+            count = 0;
             while (count < dishAskedFreq) {
-                double r1=Math.random() * numOfDishes;
+                double r1 = Math.random() * numOfDishes;
                 random = (int) r1;
-                System.out.println("r1="+r1+" random="+random);
+                System.out.println("r1=" + r1 + " random=" + random);
                 dishName = menu.get(dishType).get(random);
-                System.out.println("random="+random+" dishName="+dishName);
+                System.out.println("random=" + random + " dishName=" + dishName);
                 if (!set.contains(dishName)) {
                     set.add(dishName);
                     count++;
@@ -106,15 +91,6 @@ public class DinnerConstructor {
             throw new RuntimeException(e);
         }
         return new Combo(set);
-    }
-
-    private void printCombo() {
-        int count = 0;
-        for (var combo : comboSet) {
-            count++;
-            System.out.println("Комбо " + count);
-            System.out.println("[" + combo + "]");
-        }
     }
 
     boolean isEnoughPower(int numberOfCombos, Box<String> boxWithTypes) {
@@ -154,7 +130,30 @@ public class DinnerConstructor {
         for (int i = 1; i <= k; i++) {
             result = result / i;
         }
-        System.out.println("combination: k="+k+" n="+n+" res="+result );
+        System.out.println("combination: k=" + k + " n=" + n + " res=" + result);
         return result;
     }
+
+    private void printCombo() {
+        int count = 0;
+        for (var combo : comboSet) {
+            count++;
+            System.out.println("Комбо " + count);
+            System.out.println("[" + combo + "]");
+        }
+    }
+
+    void printMenu() {
+        System.out.println("Меню:");
+        if (menu.isEmpty()) System.out.println("Меню не заполнено");
+        else {
+            for (var entry : menu.entrySet()) {
+                System.out.println("Категория: " + entry.getKey());
+                for (String dish : entry.getValue()) {
+                    System.out.println("    -" + dish);
+                }
+            }
+        }
+    }
+
 }
