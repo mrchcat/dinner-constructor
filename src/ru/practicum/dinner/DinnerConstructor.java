@@ -82,7 +82,7 @@ public class DinnerConstructor {
     }
 
     //проверка, достаточно ли блюд для генерации запрошенного количества, включая количества в разрезе категорий
-    boolean isEnoughPower(int numberOfCombos, Box<String> boxWithTypes) {
+    private boolean isEnoughPower(int numberOfCombos, Box<String> boxWithTypes) {
         boolean isEnoughPower = true;
         int dishAskedFreq; //количество блюд конкретной категорий, указанной пользователем в запросе
         int dishFactFreq; //фактическое количество блюд в конкретной категории
@@ -93,8 +93,8 @@ public class DinnerConstructor {
             dishFactFreq = dishTypeAndDishes.get(dishType).size();
 
             if (dishAskedFreq > dishFactFreq) {
-                System.out.println("Ошибка! Категория \"" + dishType + "\" требует " + dishAskedFreq
-                        + " уникальных блюда, но в меню их не более " + dishFactFreq + " шт. Добавьте больше блюд.");
+                System.out.println("Ошибка! Категория \"" + dishType + "\" требует " + dishAskedFreq +
+                        " уникальных блюда, но в меню их не более " + dishFactFreq + " шт. Добавьте больше блюд.");
                 isEnoughPower = false;
                 totalPower = totalPower * dishFactFreq;
             } else {
@@ -103,8 +103,8 @@ public class DinnerConstructor {
         }
 
         if (totalPower < numberOfCombos) {
-            System.out.println("Ошибка! Возможное число уникальных комбинаций всех блюд не превышает "
-                    + totalPower + " ,в то время как вы запрашиваете " + numberOfCombos);
+            System.out.println("Ошибка! Возможное число уникальных комбинаций всех блюд не превышает " + totalPower +
+                    " ,в то время как вы запрашиваете " + numberOfCombos);
             System.out.println("Увеличьте число блюд");
             isEnoughPower = false;
         }

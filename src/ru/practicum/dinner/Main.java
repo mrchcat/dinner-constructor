@@ -1,28 +1,30 @@
 package ru.practicum.dinner;
 
-import java.util.Locale;
 import java.util.Scanner;
 
 /*
-Программа для создания меню блюд. По сравнению с оригиналом
- - исключены повторы блюд в сгенерированных комбинациях;
- - добавлена проверка на достаточность количества блюд для генерации запрошенных комбинаций;
- - добавлена функция печати блюд;
-  https://github.com/mrchcat/dinner-constructor/
+И.К.:На мой взгляд, лучше методы addNewDish и generateDishCombo перенести в класс генерации,
+а в классе main оставить работу с меню и вводом выводом
+
+В.Т.: Не могу сказать, что до конца понял предложение. Вынес методы в класс Generator, откуда они в свою очередь
+вызывают DinnerConstructor и Box. По иному сделать не получается, т.к. по условию логика расчета и общение с
+пользователем должны быть разделены. Учитывая, что общение предполагает многочисленные проверки, то либо мы часть
+методов оставляем в Main (первоначальный вариант), либо выносим в отдельный класс, откуда в своб очередь вызываем
+класс с логикой расчета (текущий вариант).
+
 */
 public class Main {
-    private final static DinnerConstructor dc = new DinnerConstructor();
-    private final static Scanner scanner = new Scanner(System.in);
-
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Generator generator=new Generator(scanner);
         boolean isContinueMenu = true;//условие на выход из меню
 
         do {
             printMenu();
-            switch (getNumberFromUser()) {
-                case 1 -> addNewDish();
-                case 2 -> generateDishCombo();
-                case 3 -> dc.printAllDishes();
+            switch (getNumberFromUser(scanner)) {
+                case 1 -> generator.addNewDish();
+                case 2 -> generator.generateDishCombo();
+                case 3 -> generator.printAllDishes();
                 case 4 -> isContinueMenu = false;
                 default -> System.out.println("Введите корректный номер меню");
             }
@@ -41,56 +43,12 @@ public class Main {
         System.out.println("*".repeat(34));
     }
 
-    private static int getNumberFromUser() {
+    private static int getNumberFromUser(Scanner scanner) {
         int choice = -1;
         if (scanner.hasNextInt()) choice = scanner.nextInt();
         if (scanner.hasNextLine()) scanner.nextLine(); // удаляем лишний текст, если пользователь его напечатал
         return choice;
     }
 
-    private static String getStringFromUser() {
-        return scanner.nextLine().trim().toLowerCase(Locale.ROOT);
-    }
-
-    private static void addNewDish() {
-        System.out.println("Введите тип блюда:");
-        String dishType = getStringFromUser();
-        System.out.println("Введите название блюда:");
-        String dishName = getStringFromUser();
-        if (dc.isDishExist(dishName)) {
-            System.out.println("Ошибка ! Блюдо \"" + dishName + "\" уже присутствует в меню. Введите другое блюдо");
-        } else {
-            dc.addNewDish(dishType, dishName);
-            System.out.println("блюдо \"" + dishName + "\" добавлено в категорию \"" + dishType + "\"");
-        }
-    }
-
-    private static void generateDishCombo() {
-        System.out.println("Начинаем конструировать обед...");
-        System.out.println("Введите количество наборов, которые нужно сгенерировать:");
-        int numberOfCombos;
-        while ((numberOfCombos = getNumberFromUser()) <= 0) {
-            System.out.println("Введите положительное число наборов");
-        }
-        Box<String> boxWithTypes = new Box<>(); //переменная для хранения выбранных категорий вместе с их количеством
-        String dishType;
-
-        System.out.println("Введите типы блюд, разделяя символом переноса строки (enter). " +
-                "Для завершения ввода введите пустую строку");
-        while (!(dishType = getStringFromUser()).isEmpty()) {
-            if (dc.isDishTypeExist(dishType)) {
-                boxWithTypes.add(dishType);
-            } else {
-                System.out.println("Ошибка. Категория \"" + dishType + "\" отсутствует в меню. Введите другой тип" +
-                        " или пустую строку для завершения");
-            }
-        }
-        if (boxWithTypes.isEmpty()) {
-            System.out.println("Ошибка ! Корректные типы блюд не введены. " +
-                    "Проверьте, что меню заполнено и повторите ввод");
-        } else{
-            dc.generateDishComboSet(numberOfCombos, boxWithTypes);
-        }
-    }
 
 }
